@@ -19,10 +19,15 @@ await (async () => {
     const obj = await res.json();
     return [Number(obj.click), performance.now()];
   };
-  const [initCount, initTime] = await refresh();
-  let lastCount = initCount;
-  let lastTime = initTime;
-  return setInterval(async () => {
+  let [lastCount, lastTime] = await refresh();
+  let initCount;
+  let initTime;
+  const update = () => {
+    initCount = lastCount;
+    initTime = lastTime;
+  };
+  update();
+  return [setInterval(async () => {
     const [count, time] = await refresh();
     if (count < lastCount || time < lastTime) return;
     countElem.innerText = `阅读量：${count}`;
@@ -30,5 +35,5 @@ await (async () => {
     avgElem.innerText = `平均速度：${((count - initCount) / ((time - initTime) * 0.001)).toFixed(3)} 次/s`;
     lastCount = count;
     lastTime = time;
-  }, 100);
+  }, 100), update];
 })();
