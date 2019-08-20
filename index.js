@@ -1,4 +1,4 @@
-await (async () => {
+export default async function start(interval) {
   const newRow = () => {
     const elem = document.createElement("small");
     elem.classList.add("news-click");
@@ -35,5 +35,5 @@ await (async () => {
     avgElem.innerText = `平均速度：${((count - initCount) / ((time - initTime) * 0.001)).toFixed(3)} 次/s`;
     lastCount = count;
     lastTime = time;
-  }, 100), update];
-})();
+  }, interval), update];
+}
