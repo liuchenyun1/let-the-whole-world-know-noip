@@ -1,13 +1,4 @@
 export default async function start(interval) {
-  const newRow = () => {
-    const elem = document.createElement("small");
-    elem.classList.add("news-click");
-    return elem;
-  };
-  const rowsElem = document.getElementsByClassName("maintitle")[0];
-  rowsElem.appendChild(newRow());
-  rowsElem.appendChild(newRow());
-  const [countElem, timeElem, avgElem] = document.getElementsByClassName("news-click");
   const refresh = async () => {
     const res = await fetch("http://www.noi.cn/GetNews.dt", {
       headers: {
@@ -22,18 +13,30 @@ export default async function start(interval) {
   let [lastCount, lastTime] = await refresh();
   let initCount;
   let initTime;
-  const update = () => {
+  const newRow = () => {
+    const elem = document.createElement("small");
+    elem.classList.add("news-click");
+    return elem;
+  };
+  const rowsElem = document.getElementsByClassName("maintitle")[0];
+  rowsElem.appendChild(newRow());
+  rowsElem.appendChild(newRow());
+  rowsElem.appendChild(newRow());
+  const [countElem, speedElem, avgElem, recomputeElem] = document.getElementsByClassName("news-click");
+  const recomputeButton = document.createElement("button");
+  recomputeButton.innerText = "重新计算平均速度";
+  (recomputeButton.onclick = () => {
     initCount = lastCount;
     initTime = lastTime;
-  };
-  update();
-  return [setInterval(async () => {
+  })();
+  recomputeElem.appendChild(recomputeButton);
+  return setInterval(async () => {
     const [count, time] = await refresh();
     if (count < lastCount || time < lastTime) return;
     countElem.innerText = `阅读量：${count}`;
-    timeElem.innerText = `当前速度：${((count - lastCount) / ((time - lastTime) * 0.001)).toFixed(3)} 次/s`;
+    speedElem.innerText = `当前速度：${((count - lastCount) / ((time - lastTime) * 0.001)).toFixed(3)} 次/s`;
     avgElem.innerText = `平均速度：${((count - initCount) / ((time - initTime) * 0.001)).toFixed(3)} 次/s`;
     lastCount = count;
     lastTime = time;
-  }, interval), update];
+  }, interval);
 }
