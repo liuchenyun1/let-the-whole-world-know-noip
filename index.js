@@ -8,9 +8,10 @@ export default async function start(interval) {
       method: "POST"
     });
     const obj = await res.json();
-    return [Number(obj.click), performance.now()];
+    return Number(obj.click);
   };
-  let [lastCount, lastTime] = await refresh();
+  let lastCount = await refresh();
+  let lastTime = performance.now();
   let initCount;
   let initTime;
   const newRow = () => {
@@ -31,7 +32,8 @@ export default async function start(interval) {
   })();
   recomputeElem.appendChild(recomputeButton);
   return setInterval(async () => {
-    const [count, time] = await refresh();
+    const count = await refresh();
+    const time = performance.now();
     if (count < lastCount || time < lastTime) return;
     countElem.innerText = `阅读量：${count}`;
     speedElem.innerText = `当前速度：${((count - lastCount) / ((time - lastTime) * 0.001)).toFixed(3)} 次/s`;
