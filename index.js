@@ -1,4 +1,4 @@
-export default async function start(interval, { refresh, init, update }) {
+export default async function start({ refresh, init, update }) {
   let lastCount = await refresh();
   let lastTime = performance.now();
   let initCount;
@@ -9,12 +9,12 @@ export default async function start(interval, { refresh, init, update }) {
   };
   recomputeAverage();
   if (init instanceof Function) init = init(recomputeAverage);
-  return setInterval(async () => {
+  (async function reload() {
     const count = await refresh();
     const time = performance.now();
-    if (count < lastCount || time < lastTime) return;
     if (update) update(count, (count - lastCount) / (time - lastTime), (count - initCount) / (time - initTime), init);
     lastCount = count;
     lastTime = time;
-  }, interval);
+    reload();
+  })();
 }
