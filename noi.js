@@ -18,7 +18,7 @@ export function init(recomputeAverage) {
   rowsElem.appendChild(newRow());
   rowsElem.appendChild(newRow());
   rowsElem.appendChild(newRow());
-  const [countElem, speedElem, averageElem, recomputeElem] = document.getElementsByClassName("news-click");
+  const [countElem, speedElem, averageElem, recomputeElem] = rowsElem.getElementsByClassName("news-click");
   const recomputeButton = document.createElement("button");
   recomputeButton.innerText = "重新计算平均速度";
   recomputeButton.onclick = recomputeAverage;
