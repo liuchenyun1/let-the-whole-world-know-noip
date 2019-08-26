@@ -1,18 +1,6 @@
-export function refresh() {
-  return fetch("https://www.ccf.org.cn/ccf/stat/dealer?SiteID=122&Type=Article&LeafID=668162&URL=https://www.ccf.org.cn/c/2019-08-16/668162.shtml")
-    .then(() => new Promise((resolve, reject) => {
-      const elem = document.createElement("script");
-      elem.src = "https://www.ccf.org.cn/ccf/counter?Type=Article&ID=668162&DomID=hitcount668162";
-      elem.onload = () => {
-        elem.remove();
-        resolve(Number(document.getElementById("hitcount668162").innerText));
-      };
-      elem.onerror = () => {
-        elem.remove();
-        reject();
-      };
-      document.body.appendChild(elem);
-    }));
+export async function refresh() {
+  await fetch("https://www.ccf.org.cn/ccf/stat/dealer?SiteID=122&Type=Article&LeafID=668162&URL=https://www.ccf.org.cn/c/2019-08-16/668162.shtml");
+  return Number((await (await fetch("https://www.ccf.org.cn/ccf/counter?Type=Article&ID=668162")).text()).match(/\d+/g)[0]);
 }
 
 export function init(recomputeAverage) {
