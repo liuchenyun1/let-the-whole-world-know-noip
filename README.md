@@ -17,5 +17,5 @@ About NOIp: It's dead.
   ```js
   const root = "https://rawcdn.githack.com/sjx233/let-the-whole-world-know-noip/8cc59d9eb8995ad574e193c56080644de19484ea";
   Promise.all(["/index.js", "/ccf.js"].map(path => import(root + path)))
-    .then(([module, ccf]) => module.default(ccf, 10));
+    .then(([module, ccf]) => module.default(ccf, 5));
   ```
